@@ -1,0 +1,156 @@
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+
+plugins {
+    id 'org.springframework.boot' version '2.4.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'maven'
+    id 'maven-publish'
+//    id "org.sonarqube" version "2.7"
+}
+
+ext {
+    version_java = '1.8'
+    project_build_sourceEncoding = 'UTF-8'
+
+    set('snippetsDir', file("build/generated-snippets"))
+
+    version_project = project.properties["app.version"]
+
+    version_logback = '1.2.3'
+    version_slf4j = '1.7.30'
+
+    version_lombok = '1.18.4'
+
+    version_commons_cli = '1.4'
+    version_commons_lang = '3.9'
+    version_commons_codec = '1.14'
+
+    version_jackson = '2.11.0'
+
+    version_jetty = '1.5.7.RELEASE'
+    version_netty = '4.1.50.Final'
+
+    version_swagger = '2.9.2'
+
+    version_quartz = '2.3.2'
+
+    version_plankton = '0.6.1'
+
+    version_jsoup = '1.13.1'
+
+    version_okhttp = '4.9.0'
+}
+
+bootJar.enabled = true
+jar.enabled = true
+
+group = project.properties["app.group"]
+version = ext.version_project
+sourceCompatibility = ext.version_java
+targetCompatibility = ext.version_java
+compileJava.options.encoding = ext.project_build_sourceEncoding
+
+springBoot {
+//    updateAppVersion()
+    buildInfo {
+        properties {
+            additional = [
+//                    'group'  : project.properties["app.group"],
+//                    'name'   : project.properties["app.name"],
+//                    'version': project.properties["app.version"]
+                'fullVersion' : project.properties["app.version"]
+                        + '.'
+                        + LocalDateTime.ofInstant(properties["time"], ZoneOffset.systemDefault()).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+            ]
+        }
+    }
+}
+
+bootJar {
+    archiveName = project.properties["app.name"] + '-' + project.properties["app.version"] + "sb.${extension}"
+}
+
+
+jar {
+    manifest {
+//        attributes 'Main-Class': 'com.cas.wminterfaces.dialog06.util.Dialog06Util'
+//        attributes 'Main-Class': 'com.cas.pminterfaces.casprotocol.util.PrintingUtil'
+//        attributes 'Main-Class': 'com.cas.pminterfaces.jsonrpc.util.JsonRpcPrintingUtil'
+        attributes 'Main-Class': 'com.withwiz.cryptocurrency.util.ModulesUtil'
+//        attributes 'Main-Class': 'com.cas.legacyinterfaces.cl5000j.impl.client.CL5000jClient'
+    }
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+repositories {
+    maven { url "https://repo1.maven.org/maven2/" }
+    maven { url "https://repo.maven.apache.org/maven2/" }
+    jcenter()
+    mavenCentral()
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+dependencies {
+//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+//    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//    implementation 'org.springframework.kafka:spring-kafka'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: "${version_jetty}"
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: "${version_slf4j}"
+    implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: "${version_slf4j}"
+    implementation group: 'org.slf4j', name: 'log4j-over-slf4j', version: "${version_slf4j}"
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: "${version_logback}"
+
+    implementation group: 'org.projectlombok', name: 'lombok', version: "${version_lombok}"
+    annotationProcessor("org.projectlombok:lombok:${version_lombok}")
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+//    //h2 database
+//    runtimeOnly 'com.h2database:h2'
+
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: "${version_commons_lang}"
+    implementation group: 'commons-codec', name: 'commons-codec', version: "${version_commons_codec}"
+    implementation group: 'commons-cli', name: 'commons-cli', version: "${version_commons_cli}"
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${version_jackson}"
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${version_jackson}"
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${version_jackson}"
+
+    implementation group: 'org.quartz-scheduler', name: 'quartz', version: "${version_quartz}"
+
+    implementation group: 'com.withwiz', name: 'plankton', version: "${version_plankton}"
+
+//    //documentation
+//    implementation group: 'io.springfox', name: 'springfox-swagger2', version: "${version_swagger}"
+//    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: "${version_swagger}"
+
+    implementation group: 'org.jsoup', name: 'jsoup', version: "${version_jsoup}"
+
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: "${version_okhttp}"
+}
+
+test {
+    useJUnitPlatform()
+}
