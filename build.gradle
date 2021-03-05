@@ -79,7 +79,7 @@ jar {
 //        attributes 'Main-Class': 'com.cas.wminterfaces.dialog06.util.Dialog06Util'
 //        attributes 'Main-Class': 'com.cas.pminterfaces.casprotocol.util.PrintingUtil'
 //        attributes 'Main-Class': 'com.cas.pminterfaces.jsonrpc.util.JsonRpcPrintingUtil'
-        attributes 'Main-Class': 'com.withwiz.cryptocurrency.util.ModulesUtil'
+        attributes 'Main-Class': 'com.withwiz.cryptocurrency.util.CommandUtil'
 //        attributes 'Main-Class': 'com.cas.legacyinterfaces.cl5000j.impl.client.CL5000jClient'
     }
     from {
