@@ -1,0 +1,122 @@
+# mode
+application:
+  profiles:
+    active: dev
+
+# logging
+logging:
+  # level
+  level:
+    # default
+    root: INFO
+    # packages
+    com.withwiz: INFO
+    com.withwiz.cryptocurrency: INFO
+    # spring
+    org.springframework.web: ERROR
+    # hibernate
+    org.hibernate: ERROR
+    org.hibernate.SQL: DEBUG
+    #org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+    # howtodoinjava
+    com.howtodoinjav: INFO
+  file:
+    # log file full path
+    name: /apps/logs/monitor/exchange-interfaces.log
+    # max history(days)
+    max-history: 30
+    # max size per file
+    max-size: 500MB
+  # log formatter
+  pattern:
+    console: "%-5level %date %thread [%logger{36}.%M:%line] %msg%n"
+    file: "%-5level %date %thread [%logger{36}.%M:%line] %msg%n"
+
+# server port
+server.port: 80
+
+# h2 database
+#spring.h2.console:
+#  enabled: true
+#  path: /h2
+
+# h2 embeded mode
+#spring.datasource:
+#  data: classpath:/sql/data/*.sql
+#  driver-class-name: org.h2.Driver
+#  url: jdbc:h2:file:~/dkargo-exchange-monitor
+#  username: exchangemonitor
+#  password: exchangemonitor
+#  initialization-mode: always
+#  #continue-on-error: true
+#  #schema: classpath:/sql/schema/schema.sql
+
+# h2 server mode
+#spring.datasource:
+#  hikari:
+#    driver-class-name: org.h2.Driver
+#    jdbc-url: jdbc:h2:tcp://localhost/~/dkargo-exchange-monitor
+#    username: exchangemonitor
+#    password: exchangemonitor
+
+# jpa
+spring.jpa:
+  show-sql: true
+  properties.hibernate.format_sql: true
+  generate-ddl: true
+  hibernate:
+    ddl-auto: update
+    naming:
+      implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+# thymeleaf default settings
+spring.thymeleaf:
+  prefix: classpath:/templates/
+  suffix: .html
+  mode: HTML
+  encoding: UTF-8
+  check-template-location: true
+  ## thymeleaf custom settings
+  cache: false
+
+# devtools
+spring.devtools.restart.enabled: true
+
+# profiles
+spring.profiles.include:
+
+# actuators
+management.endpoints.web.exposure.include: "*"
+#management.endpoints.web.exposure.exclude: "*"
+
+# quarts
+spring.quartz:
+  job-store-type: jdbc
+  jdbc.initialize-schema: always
+
+# exchange:upbit
+exchange:
+  upbit:
+    api:
+      host:
+      port:
+      access.key:
+      secret.key:
+    schedule:
+      #milliseconds
+      delay.max: 8
+
+# telegram interface
+telegram:
+  api:
+    bots:
+      - name:
+        token:
+        chatId:
+      - name:
+        token:
+        chatId:
+  # notice message
+  notice:
+    message: "[NewDisc] \n"
