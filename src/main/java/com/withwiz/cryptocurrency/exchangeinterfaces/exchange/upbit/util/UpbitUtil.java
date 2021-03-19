@@ -87,8 +87,19 @@ public class UpbitUtil {
         Response response = client.newCall(request).execute();
         if (response.body() == null) {
             return null;
-        } else
-            return getLastDisclosure(response.body().byteStream());
+        } else {
+            DisclosurePost disclosurePost = null;
+            byte[] bytes = null;
+            try {
+                bytes = response.body().bytes();
+//                log.info("response body:\n{}", new String(bytes));
+                disclosurePost = getLastDisclosure(bytes);
+            } catch (IOException e) {
+                log.error("response body:\n{}", new String(bytes));
+                throw e;
+            }
+            return disclosurePost;
+        }
     }
 
     /**
@@ -96,9 +107,22 @@ public class UpbitUtil {
      *
      * @param inputStream InputStream
      * @return DisclosurePost
+     * @throws IOException
      */
     public static DisclosurePost getLastDisclosure(InputStream inputStream) throws IOException {
         ProjectDisclosure projectDisclosure = getProjectDisclosure(inputStream);
+        return projectDisclosure.getData().getPosts().get(0);
+    }
+
+    /**
+     * get last disclosure
+     *
+     * @param bytes message byte array
+     * @return DisclosurePost
+     * @throws IOException
+     */
+    public static DisclosurePost getLastDisclosure(byte[] bytes) throws IOException {
+        ProjectDisclosure projectDisclosure = getProjectDisclosure(bytes);
         return projectDisclosure.getData().getPosts().get(0);
     }
 
@@ -111,6 +135,19 @@ public class UpbitUtil {
     public static ProjectDisclosure getProjectDisclosure(InputStream inputStream) throws IOException {
         ProjectDisclosure result = null;
         JsonNode rootNode = objectMapper.readValue(inputStream, JsonNode.class);
+        log.debug("received from remote: {}", rootNode.toPrettyString());
+        return objectMapper.convertValue(rootNode, ProjectDisclosure.class);
+    }
+
+    /**
+     * get a ProjectDisclosure
+     *
+     * @param bytes message byte array
+     * @return ProjectDisclosure
+     */
+    public static ProjectDisclosure getProjectDisclosure(byte[] bytes) throws IOException {
+        ProjectDisclosure result = null;
+        JsonNode rootNode = objectMapper.readValue(bytes, JsonNode.class);
         log.debug("received from remote: {}", rootNode.toPrettyString());
         return objectMapper.convertValue(rootNode, ProjectDisclosure.class);
     }
