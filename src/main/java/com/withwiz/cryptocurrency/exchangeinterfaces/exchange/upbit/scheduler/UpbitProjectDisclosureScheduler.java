@@ -66,7 +66,7 @@ public class UpbitProjectDisclosureScheduler extends ASpringDynamicScheduler {
         } catch (IOException e) {
             log.error("{}", e);
         }
-        super.reset(true);
+//        super.reset(true);
 
     }
 
