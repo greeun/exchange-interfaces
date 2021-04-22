@@ -11,6 +11,11 @@ public class UpbitConsts {
     public static int RANDOM_MAX_BOUND = 8;
 
     /**
+     * URL: notice for coin listing
+     */
+    public static String URL_NOTICE_API = "https://api-manager.upbit.com/api/v1/notices?page=1&per_page=20&thread_name=general";
+
+    /**
      * URL: disclosure API
      */
     public static String URL_DISCLOSURE_API = "https://project-team.upbit.com/api/v1/disclosure?region=kr&per_page=20";
