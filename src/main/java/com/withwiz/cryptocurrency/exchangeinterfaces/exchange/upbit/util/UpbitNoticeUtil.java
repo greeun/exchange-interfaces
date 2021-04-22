@@ -4,9 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.UpbitConsts;
-import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.dto.disclosure.DisclosurePost;
-import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.dto.listing.CoinListing;
-import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.dto.listing.NoticePost;
+import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.dto.notice.Notice;
+import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.dto.notice.NoticePost;
 import com.withwiz.util.RandomUtil;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -111,7 +110,7 @@ public class UpbitNoticeUtil {
      * @throws IOException
      */
     public static NoticePost getLastNoticePost(InputStream inputStream) throws IOException {
-        CoinListing coinListing = getCoinListing(inputStream);
+        Notice coinListing = getCoinListing(inputStream);
         return coinListing.getData().getNoticePosts().get(0);
     }
 
@@ -123,7 +122,7 @@ public class UpbitNoticeUtil {
      * @throws IOException
      */
     public static NoticePost getLastNoticePost(byte[] bytes) throws IOException {
-        CoinListing coinListing = getCoinListing(bytes);
+        Notice coinListing = getCoinListing(bytes);
         return coinListing.getData().getNoticePosts().get(0);
     }
 
@@ -133,11 +132,11 @@ public class UpbitNoticeUtil {
      * @param inputStream InputStream
      * @return CoinListing
      */
-    public static CoinListing getCoinListing(InputStream inputStream) throws IOException {
-        CoinListing result = null;
+    public static Notice getCoinListing(InputStream inputStream) throws IOException {
+        Notice result = null;
         JsonNode rootNode = objectMapper.readValue(inputStream, JsonNode.class);
         log.debug("received from remote: {}", rootNode.toPrettyString());
-        return objectMapper.convertValue(rootNode, CoinListing.class);
+        return objectMapper.convertValue(rootNode, Notice.class);
     }
 
     /**
@@ -146,11 +145,11 @@ public class UpbitNoticeUtil {
      * @param bytes message byte array
      * @return CoinListing
      */
-    public static CoinListing getCoinListing(byte[] bytes) throws IOException {
-        CoinListing result = null;
+    public static Notice getCoinListing(byte[] bytes) throws IOException {
+        Notice result = null;
         JsonNode rootNode = objectMapper.readValue(bytes, JsonNode.class);
         log.debug("received from remote: {}", rootNode.toPrettyString());
-        return objectMapper.convertValue(rootNode, CoinListing.class);
+        return objectMapper.convertValue(rootNode, Notice.class);
     }
 
     /**
