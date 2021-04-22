@@ -1,6 +1,6 @@
 package com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler;
 
-import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.dto.listing.NoticePost;
+import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.dto.notice.NoticePost;
 import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.util.UpbitNoticeUtil;
 import com.withwiz.interfaces.scheduler.config.SchedulerProperties;
 import com.withwiz.interfaces.telegram.TelegramUtil;
