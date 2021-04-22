@@ -13,7 +13,7 @@ import java.util.concurrent.ScheduledFuture;
  */
 public abstract class ASpringDynamicScheduler implements IScheduler {
     /**
-     *
+     * logger
      */
     protected Logger log = LoggerFactory.getLogger(getClass());
 
@@ -52,7 +52,8 @@ public abstract class ASpringDynamicScheduler implements IScheduler {
      */
     @Override
     public void stop() {
-        scheduler.shutdown();
+        if (scheduler != null)
+            scheduler.shutdown();
     }
 
     /**
@@ -76,8 +77,8 @@ public abstract class ASpringDynamicScheduler implements IScheduler {
         this.data = data;
     }
 
-    private Runnable getRunnable(){
-        return new Runnable(){
+    private Runnable getRunnable() {
+        return new Runnable() {
             @Override
             public void run() {
                 try {
@@ -90,14 +91,25 @@ public abstract class ASpringDynamicScheduler implements IScheduler {
     }
 
     public void reset(boolean mayInterruptIfRunning) {
-        if(scheduledFuture != null) {
+        if (scheduledFuture != null) {
             scheduledFuture.cancel(mayInterruptIfRunning);
             this.scheduledFuture = null;
         }
         this.begin();
     }
 
-    public abstract void processJob(Map data);
+    /**
+     * process scheduled job
+     *
+     * @param data for scheduled job
+     * @throws Exception
+     */
+    public abstract void processJob(Map data) throws Exception;
 
+    /**
+     * get trigger for every time job
+     *
+     * @return Trigger
+     */
     public abstract Trigger getTrigger();
 }
