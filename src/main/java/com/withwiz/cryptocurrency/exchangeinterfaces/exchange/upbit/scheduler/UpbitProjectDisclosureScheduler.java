@@ -1,7 +1,7 @@
 package com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler;
 
 import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.dto.disclosure.DisclosurePost;
-import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.util.UpbitUtil;
+import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.util.UpbitDisclosureUtil;
 import com.withwiz.interfaces.telegram.TelegramUtil;
 import com.withwiz.interfaces.telegram.config.Bot;
 import com.withwiz.interfaces.telegram.config.BotProperties;
@@ -25,17 +25,6 @@ import java.util.Map;
  */
 @Component
 public class UpbitProjectDisclosureScheduler extends ASpringDynamicScheduler {
-//    /**
-//     * telelgram api token
-//     */
-//    @Value("${telegram.api.bots.token}")
-//    String apiToken;
-//
-//    /**
-//     * telegram chat id: channel
-//     */
-//    @Value("${telegram.api.bots.chatId}")
-//    long chatId;
 
     @Autowired
     BotProperties botProperties;
@@ -49,25 +38,23 @@ public class UpbitProjectDisclosureScheduler extends ASpringDynamicScheduler {
     @Value("${exchange.upbit.schedule.delay.max}")
     int randomMaxBound;
 
+    @Override
     public void processJob(Map data) {
         try {
-            DisclosurePost newDisclosurePost = UpbitUtil.checkNewDisclosure();
+            DisclosurePost newDisclosurePost = UpbitDisclosureUtil.checkNewDisclosure();
             //if new disclosure exist
             if (newDisclosurePost != null) {
                 //publish a message to telegram
                 TelegramResponseSendMessage response = null;
                 String sendMessage = message + newDisclosurePost.toString();
-                for(Bot bot: botProperties.getBots()) {
+                for (Bot bot : botProperties.getBots()) {
                     response = TelegramUtil.publishMessageToChannel(bot.getToken(), bot.getChatId(), sendMessage);
-//                response = TelegramUtil.publishMessageToChannel(apiToken, chatId, sendMessage);
                     log.info("telegram response: {}", response);
                 }
             }
         } catch (IOException e) {
             log.error("{}", e);
         }
-//        super.reset(true);
-
     }
 
     @Override
@@ -79,7 +66,7 @@ public class UpbitProjectDisclosureScheduler extends ASpringDynamicScheduler {
                 int seconds = RandomUtil.randomInt(randomMaxBound);
                 log.info("delay randomized: {}", seconds);
 
-                Calendar nextExecutionTime =  new GregorianCalendar();
+                Calendar nextExecutionTime = new GregorianCalendar();
                 Date lastActualExecutionTime = triggerContext.lastActualExecutionTime();
                 nextExecutionTime.setTime(lastActualExecutionTime != null ? lastActualExecutionTime : new Date());
                 nextExecutionTime.add(Calendar.MILLISECOND, seconds * 1000); //you can get the value from wherever you want
