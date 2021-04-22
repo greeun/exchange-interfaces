@@ -11,7 +11,7 @@ logging:
     root: INFO
     # packages
     com.withwiz: INFO
-    com.withwiz.cryptocurrency: INFO
+    com.withwiz.cryptocurrency: DEBUG
     # spring
     org.springframework.web: ERROR
     # hibernate
@@ -120,3 +120,8 @@ telegram:
   notice:
     message: "[신규]: \n"
 
+# scheduler interface
+scheduler:
+  instances:
+    - class: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitNoticeListingScheduler"
+    - class: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitProjectDisclosureScheduler"
