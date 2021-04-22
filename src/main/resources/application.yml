@@ -123,5 +123,7 @@ telegram:
 # scheduler interface
 scheduler:
   instances:
-    - class: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitNoticeListingScheduler"
-    - class: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitProjectDisclosureScheduler"
+    - name: "UpbitNoticeListingScheduler"
+      className: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitNoticeListingScheduler"
+    - name: "UpbitProjectDisclosureScheduler"
+      className: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitProjectDisclosureScheduler"
