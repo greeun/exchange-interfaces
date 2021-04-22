@@ -16,11 +16,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class UpbitUtil {
+public class UpbitDisclosureUtil {
     /**
      * logger
      */
-    private static Logger log = LoggerFactory.getLogger(UpbitUtil.class);
+    private static Logger log = LoggerFactory.getLogger(UpbitDisclosureUtil.class);
 
     /**
      * object mapper
@@ -38,14 +38,14 @@ public class UpbitUtil {
      * @return new disclosure post
      */
     public static DisclosurePost checkNewDisclosure() throws IOException {
-        DisclosurePost newDisclosurePost = UpbitUtil.getNewDisclosure();
+        DisclosurePost newDisclosurePost = UpbitDisclosureUtil.getNewDisclosure();
         if (newDisclosurePost == null) {
-            log.debug("New disclosure NOT exist.");
+            log.debug("New post NOT exist.");
         }
         //set from new disclosure post
         else {
             previousProjectDisclosurePost = newDisclosurePost;
-            log.info("Set a previous disclosure: {}", newDisclosurePost);
+            log.info("Set a previous post: {}", newDisclosurePost);
         }
         return newDisclosurePost;
     }
@@ -57,15 +57,15 @@ public class UpbitUtil {
      * @throws IOException
      */
     public static DisclosurePost getNewDisclosure() throws IOException {
-        DisclosurePost disclosurePost = UpbitUtil.getLastDisclosure(UpbitConsts.URL_DISCLOSURE_API);
-        log.debug("last disclosure post: {}", disclosurePost);
+        DisclosurePost disclosurePost = UpbitDisclosureUtil.getLastDisclosure(UpbitConsts.URL_DISCLOSURE_API);
+        log.debug("last post: {}", disclosurePost);
         // if disclosure NOT exist
         if (disclosurePost == null) {
             return null;
         }
         //check new disclosure
         if (isNewDisclosurePost(disclosurePost)) {
-            log.debug("new disclosure: {}", disclosurePost);
+            log.debug("new post: {}", disclosurePost);
             return disclosurePost;
         } else
             return null;
@@ -163,7 +163,7 @@ public class UpbitUtil {
         if (previousProjectDisclosurePost == null) {
             //set previous
             previousProjectDisclosurePost = disclosurePost;
-            log.info("Set a previous disclosure: {}", disclosurePost);
+            log.info("Set a previous post: {}", disclosurePost);
             return false;
         }
         if (!previousProjectDisclosurePost.getAssets().equals(disclosurePost.getAssets())
