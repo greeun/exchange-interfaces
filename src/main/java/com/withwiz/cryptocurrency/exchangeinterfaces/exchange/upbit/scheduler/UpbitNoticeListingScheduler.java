@@ -1,5 +1,6 @@
 package com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler;
 
+import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.UpbitConsts;
 import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.dto.notice.NoticePost;
 import com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.util.UpbitNoticeUtil;
 import com.withwiz.interfaces.scheduler.config.SchedulerProperties;
@@ -50,7 +51,8 @@ public class UpbitNoticeListingScheduler extends ASpringDynamicScheduler {
             if (newNoticePost != null) {
                 //publish a message to telegram
                 TelegramResponseSendMessage response = null;
-                String sendMessage = message + newNoticePost.toString();
+                String detailPageUrl = UpbitConsts.URL_NOTICE_DETAIL_PAGE + newNoticePost.getId();
+                String sendMessage = message + newNoticePost.toString() + ", url=" + detailPageUrl;
                 for(Bot bot: botProperties.getBots()) {
                     response = TelegramUtil.publishMessageToChannel(bot.getToken(), bot.getChatId(), sendMessage);
                     log.info("telegram response: {}", response);

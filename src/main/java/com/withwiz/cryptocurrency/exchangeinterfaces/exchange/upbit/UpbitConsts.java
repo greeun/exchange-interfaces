@@ -16,6 +16,11 @@ public class UpbitConsts {
     public static String URL_NOTICE_API = "https://api-manager.upbit.com/api/v1/notices?page=1&per_page=20&thread_name=general";
 
     /**
+     * URL: notice detail page
+     */
+    public static String URL_NOTICE_DETAIL_PAGE = "https://upbit.com/service_center/notice?id=";
+
+    /**
      * URL: disclosure API
      */
     public static String URL_DISCLOSURE_API = "https://project-team.upbit.com/api/v1/disclosure?region=kr&per_page=20";
