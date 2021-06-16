@@ -34,7 +34,7 @@ public class ExchangeMonitorApplication {
             for (Instance instance : schedulerProperties.getInstances()) {
                 Class clz = Class.forName(instance.getClassName());
                 Object obj = context.getBean(clz);
-                obj.getClass().getMethod("begin", null).invoke(obj);
+                obj.getClass().getMethod("begin").invoke(obj);
             }
         } catch (IllegalAccessException e) {
             log.error("{}", e);
