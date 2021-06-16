@@ -3,12 +3,19 @@ application:
   profiles:
     active: dev
 
-# logging
+# ---------- personal custom setting
+custom:
+  logging:
+    level:
+      default: INFO
+    format: "%clr(%-5level) %clr(%date){cyan} %clr(%thread){yellow} %clr([%logger{36}.%M:%line]){blue} %msg%n"
+
+# ---------- logging
 logging:
   # level
   level:
     # default
-    root: INFO
+    root: ${custom.logging.level.default}
     # packages
     com.withwiz: INFO
     com.withwiz.cryptocurrency: DEBUG
@@ -18,6 +25,22 @@ logging:
     org.hibernate: ERROR
     org.hibernate.SQL: DEBUG
     #org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+    # log4jdbc
+    jdbc: OFF
+    # for connection "open" or "close"
+    jdbc.connection: ERROR
+    # for sql
+    jdbc.sqlonly: DEBUG
+    # for query time(milliseconds)
+    jdbc.sqltiming: OFF
+    # alls except for resultset
+    jdbc.audit: OFF
+    # with resultset
+    jdbc.resultset: OFF
+    # with resultset table
+    jdbc.resultsettable: DEBUG
+    # hikari
+    com.zaxxer.hikari.HikariDataSource: ERROR
     # howtodoinjava
     com.howtodoinjav: INFO
   file:
@@ -29,37 +52,45 @@ logging:
     max-size: 500MB
   # log formatter
   pattern:
-    console: "%-5level %date %thread [%logger{36}.%M:%line] %msg%n"
-    file: "%-5level %date %thread [%logger{36}.%M:%line] %msg%n"
+    console: ${custom.logging.format}
+    file: ${custom.logging.format}
 
-# server port
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+
+# ---------- server port
 server.port: 80
 
-# h2 database
-#spring.h2.console:
-#  enabled: true
-#  path: /h2
+# ---------- database
+spring.datasource:
+  #  driver-class-name: org.h2.Driver
+  driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  # for h2 embeded mode
+  # url: jdbc:h2:file:~/dkargoweb
+  url: jdbc:log4jdbc:h2:file:~/exchange-interfaces
+  # for server mode
+  # url: jdbc:h2:tcp://localhost/~/dkargo-exchange-monitor
+  username: exchangemonitor
+  password: exchangemonitor
+  initialization-mode: always
+  hikari:
+    connection-timeout: 5000
+    validation-timeout: 1000
+    maximum-pool-size: 30
+    minimum-idle: 2
+    connection-test-query: SELECT 1
+  #continue-on-error: true
+  data: classpath:/sql/data/*.sql
+  #schema: classpath:/sql/schema/schema.sql
 
-# h2 embeded mode
-#spring.datasource:
-#  data: classpath:/sql/data/*.sql
-#  driver-class-name: org.h2.Driver
-#  url: jdbc:h2:file:~/dkargo-exchange-monitor
-#  username: exchangemonitor
-#  password: exchangemonitor
-#  initialization-mode: always
-#  #continue-on-error: true
-#  #schema: classpath:/sql/schema/schema.sql
+# ---------- h2 database
+spring.h2.console:
+  enabled: true
+  path: /h2
 
-# h2 server mode
-#spring.datasource:
-#  hikari:
-#    driver-class-name: org.h2.Driver
-#    jdbc-url: jdbc:h2:tcp://localhost/~/dkargo-exchange-monitor
-#    username: exchangemonitor
-#    password: exchangemonitor
-
-# jpa
+# ---------- jpa
 spring.jpa:
   show-sql: true
   properties.hibernate.format_sql: true
@@ -70,7 +101,7 @@ spring.jpa:
       implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
       physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
-# thymeleaf default settings
+# ---------- thymeleaf default settings
 spring.thymeleaf:
   prefix: classpath:/templates/
   suffix: .html
@@ -80,22 +111,28 @@ spring.thymeleaf:
   ## thymeleaf custom settings
   cache: false
 
-# devtools
+# ---------- devtools
 spring.devtools.restart.enabled: true
 
-# profiles
-spring.profiles.include:
-
-# actuators
+# ---------- actuators
 management.endpoints.web.exposure.include: "*"
 #management.endpoints.web.exposure.exclude: "*"
 
+# ---------- scheduler
 # quarts
 spring.quartz:
   job-store-type: jdbc
   jdbc.initialize-schema: always
 
-# exchange:upbit
+# scheduler interface
+scheduler:
+  instances:
+    - name: "UpbitNoticeListingScheduler"
+      className: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitNoticeListingScheduler"
+    - name: "UpbitProjectDisclosureScheduler"
+      className: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitProjectDisclosureScheduler"
+
+# ---------- exchange:upbit
 exchange:
   upbit:
     api:
@@ -105,8 +142,9 @@ exchange:
       secret.key:
     schedule:
       #milliseconds
-      delay.max: 8
+      delay.max: 3
 
+# ---------- telegram interface
 telegram:
   api:
     bots:
@@ -118,12 +156,7 @@ telegram:
         chatId:
   # notice message
   notice:
-    message: "[신규]: \n"
+    message: "[News] \n"
 
-# scheduler interface
-scheduler:
-  instances:
-    - name: "UpbitNoticeListingScheduler"
-      className: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitNoticeListingScheduler"
-    - name: "UpbitProjectDisclosureScheduler"
-      className: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitProjectDisclosureScheduler"
+# ---------- profiles
+spring.profiles.include:
