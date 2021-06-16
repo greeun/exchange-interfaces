@@ -12,36 +12,26 @@ plugins {
 }
 
 ext {
-    version_java = '1.8'
-    project_build_sourceEncoding = 'UTF-8'
-
     set('snippetsDir', file("build/generated-snippets"))
-
     version_project = project.properties["app.version"]
-
     version_logback = '1.2.3'
     version_slf4j = '1.7.30'
-
     version_lombok = '1.18.4'
-
     version_commons_cli = '1.4'
     version_commons_lang = '3.9'
     version_commons_codec = '1.14'
-
     version_jackson = '2.11.0'
-
-    version_jetty = '1.5.7.RELEASE'
     version_netty = '4.1.50.Final'
-
-    version_swagger = '2.9.2'
+    version_log4jdbc = '1.16'
 
     version_quartz = '2.3.2'
-
     version_plankton = '0.6.1'
-
     version_jsoup = '1.13.1'
-
     version_okhttp = '4.9.0'
+    version_jetty = '1.5.7.RELEASE'
+    version_swagger = '2.9.2'
+    version_java = '1.8'
+    project_build_sourceEncoding = 'UTF-8'
 }
 
 bootJar.enabled = true
@@ -54,16 +44,13 @@ targetCompatibility = ext.version_java
 compileJava.options.encoding = ext.project_build_sourceEncoding
 
 springBoot {
-//    updateAppVersion()
     buildInfo {
         properties {
             additional = [
 //                    'group'  : project.properties["app.group"],
 //                    'name'   : project.properties["app.name"],
 //                    'version': project.properties["app.version"]
-                'fullVersion' : project.properties["app.version"]
-                        + '.'
-                        + LocalDateTime.ofInstant(properties["time"], ZoneOffset.systemDefault()).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+                'fullVersion' : project.properties["app.version"] + '.' + LocalDateTime.ofInstant(properties["time"], ZoneOffset.systemDefault()).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
             ]
         }
     }
