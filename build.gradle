@@ -105,10 +105,10 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: "${version_slf4j}"
-    implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: "${version_slf4j}"
-    implementation group: 'org.slf4j', name: 'log4j-over-slf4j', version: "${version_slf4j}"
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: "${version_logback}"
+    compile group: 'org.slf4j', name: 'slf4j-api', version: "${version_slf4j}"
+    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: "${version_slf4j}"
+    compile group: 'org.slf4j', name: 'log4j-over-slf4j', version: "${version_slf4j}"
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: "${version_logback}"
 
     implementation group: 'org.projectlombok', name: 'lombok', version: "${version_lombok}"
     annotationProcessor("org.projectlombok:lombok:${version_lombok}")
@@ -117,15 +117,15 @@ dependencies {
 //    //h2 database
 //    runtimeOnly 'com.h2database:h2'
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: "${version_commons_lang}"
-    implementation group: 'commons-codec', name: 'commons-codec', version: "${version_commons_codec}"
-    implementation group: 'commons-cli', name: 'commons-cli', version: "${version_commons_cli}"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: "${version_commons_lang}"
+    compile group: 'commons-codec', name: 'commons-codec', version: "${version_commons_codec}"
+    compile group: 'commons-cli', name: 'commons-cli', version: "${version_commons_cli}"
 
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${version_jackson}"
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${version_jackson}"
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${version_jackson}"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${version_jackson}"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${version_jackson}"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${version_jackson}"
 
-    implementation group: 'org.quartz-scheduler', name: 'quartz', version: "${version_quartz}"
+    compile group: 'org.quartz-scheduler', name: 'quartz', version: "${version_quartz}"
 
     implementation group: 'com.withwiz', name: 'plankton', version: "${version_plankton}"
 
