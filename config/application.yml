@@ -3,12 +3,24 @@ application:
   profiles:
     active: dev
 
+# multi config
+spring.config:
+    import:
+      - classpath:/application.yml
+
+# ---------- personal custom setting
+custom:
+  logging:
+    level:
+      default: INFO
+    format: "%clr(%-5level) %clr(%date){cyan} %clr(%thread){yellow} %clr([%logger{36}.%M:%line]){blue} %msg%n"
+
 # logging
 logging:
   # level
   level:
     # default
-    root: INFO
+    root: ${custom.logging.level.default}
     # packages
     com.withwiz: INFO
     com.withwiz.cryptocurrency: INFO
@@ -18,46 +30,73 @@ logging:
     org.hibernate: ERROR
     org.hibernate.SQL: DEBUG
     #org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+    # log4jdbc
+    jdbc: OFF
+    # for connection "open" or "close"
+    jdbc.connection: ERROR
+    # for sql
+    jdbc.sqlonly: DEBUG
+    # for query time(milliseconds)
+    jdbc.sqltiming: OFF
+    # alls except for resultset
+    jdbc.audit: OFF
+    # with resultset
+    jdbc.resultset: OFF
+    # with resultset table
+    jdbc.resultsettable: DEBUG
+    # hikari
+    com.zaxxer.hikari.HikariDataSource: ERROR
     # howtodoinjava
     com.howtodoinjav: INFO
   file:
     # log file full path
-    name: /apps/logs/monitor/exchange-interfaces.log
+    name: /apps/ExchangeMonitor/logs/exchange-interfaces.log
     # max history(days)
     max-history: 30
     # max size per file
     max-size: 500MB
   # log formatter
   pattern:
-    console: "%-5level %date %thread [%logger{36}.%M:%line] %msg%n"
-    file: "%-5level %date %thread [%logger{36}.%M:%line] %msg%n"
+    # disable console logging
+    console:
+    file: ${custom.logging.format}
+
+spring.main:
+    banner-mode: OFF
+
+spring.output:
+    ansi:
+      enabled: ALWAYS
 
 # server port
 server.port: 80
 
-# h2 database
-#spring.h2.console:
-#  enabled: true
-#  path: /h2
-
-# h2 embeded mode
+# ---------- database
 #spring.datasource:
-#  data: classpath:/sql/data/*.sql
-#  driver-class-name: org.h2.Driver
-#  url: jdbc:h2:file:~/dkargo-exchange-monitor
+#  #  driver-class-name: org.h2.Driver
+#  driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#  # for h2 embeded mode
+#  # url: jdbc:h2:file:~/dkargoweb
+#  url: jdbc:log4jdbc:h2:file:~/exchange-interfaces
+#  # for server mode
+#  # url: jdbc:h2:tcp://localhost/~/dkargo-exchange-monitor
 #  username: exchangemonitor
 #  password: exchangemonitor
 #  initialization-mode: always
-#  #continue-on-error: true
-#  #schema: classpath:/sql/schema/schema.sql
-
-# h2 server mode
-#spring.datasource:
 #  hikari:
-#    driver-class-name: org.h2.Driver
-#    jdbc-url: jdbc:h2:tcp://localhost/~/dkargo-exchange-monitor
-#    username: exchangemonitor
-#    password: exchangemonitor
+#    connection-timeout: 5000
+#    validation-timeout: 1000
+#    maximum-pool-size: 30
+#    minimum-idle: 2
+#    connection-test-query: SELECT 1
+#  #continue-on-error: true
+#  data: classpath:/sql/data/*.sql
+#  #schema: classpath:/sql/schema/schema.sql
+#
+## ---------- h2 database
+#spring.h2.console:
+#  enabled: true
+#  path: /h2
 
 # jpa
 spring.jpa:
@@ -82,9 +121,6 @@ spring.thymeleaf:
 
 # devtools
 spring.devtools.restart.enabled: true
-
-# profiles
-spring.profiles.include:
 
 # actuators
 management.endpoints.web.exposure.include: "*"
@@ -111,12 +147,16 @@ exchange:
 telegram:
   api:
     bots:
-      - name:
-        token:
-        chatId:
-      - name:
-        token:
-        chatId:
+      - name: ub_project_disclosure_bot
+        token: 5844168007:AAGDLLUbGOEgomRQTwFNcHvjIqxwBo_0CRY
+        chatId: 34086924
+
+      # - name:
+      #   token:
+      #   chatId:
   # notice message
   notice:
-    message: "[NewDisc] \n"
+    message: "[News] \n"
+
+# profiles
+spring.profiles.include:

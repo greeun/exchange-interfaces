@@ -3,12 +3,17 @@ application:
   profiles:
     active: dev
 
+# multi config
+#spring.config:
+#  import:
+#    - classpath:/application.yml
+
 # ---------- personal custom setting
-custom:
-  logging:
-    level:
-      default: INFO
-    format: "%clr(%-5level) %clr(%date){cyan} %clr(%thread){yellow} %clr([%logger{36}.%M:%line]){blue} %msg%n"
+#custom:
+#  logging:
+#    level:
+#      default: INFO
+#    format: "%clr(%-5level) %clr(%date){cyan} %clr(%thread){yellow} %clr([%logger{36}.%M:%line]){blue} %msg%n"
 
 # ---------- logging
 logging:
@@ -16,49 +21,48 @@ logging:
   level:
     # default
     root: ${custom.logging.level.default}
-    # packages
-    com.withwiz: INFO
-    com.withwiz.cryptocurrency: DEBUG
-    # spring
-    org.springframework.web: ERROR
-    # hibernate
-    org.hibernate: ERROR
-    org.hibernate.SQL: DEBUG
-    #org.hibernate.type.descriptor.sql.BasicBinder=TRACE
-    # log4jdbc
-    jdbc: OFF
-    # for connection "open" or "close"
-    jdbc.connection: ERROR
-    # for sql
-    jdbc.sqlonly: DEBUG
-    # for query time(milliseconds)
-    jdbc.sqltiming: OFF
-    # alls except for resultset
-    jdbc.audit: OFF
-    # with resultset
-    jdbc.resultset: OFF
-    # with resultset table
-    jdbc.resultsettable: DEBUG
-    # hikari
-    com.zaxxer.hikari.HikariDataSource: ERROR
-    # howtodoinjava
-    com.howtodoinjav: INFO
-  file:
-    # log file full path
-    name: /apps/logs/monitor/exchange-interfaces.log
-    # max history(days)
-    max-history: 30
-    # max size per file
-    max-size: 500MB
+#    # packages
+#    com.withwiz: INFO
+#    com.withwiz.cryptocurrency: DEBUG
+#    # spring
+#    org.springframework.web: ERROR
+#    # hibernate
+#    org.hibernate: ERROR
+#    org.hibernate.SQL: DEBUG
+#    #org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+#    # log4jdbc
+#    jdbc: OFF
+#    # for connection "open" or "close"
+#    jdbc.connection: ERROR
+#    # for sql
+#    jdbc.sqlonly: DEBUG
+#    # for query time(milliseconds)
+#    jdbc.sqltiming: OFF
+#    # alls except for resultset
+#    jdbc.audit: OFF
+#    # with resultset
+#    jdbc.resultset: OFF
+#    # with resultset table
+#    jdbc.resultsettable: DEBUG
+#    # hikari
+#    com.zaxxer.hikari.HikariDataSource: ERROR
+#    # howtodoinjava
+#    com.howtodoinjav: INFO
+#  file:
+#    # log file full path
+#    name: /apps/logs/monitor/exchange-interfaces.log
+#    # max history(days)
+#    max-history: 30
+#    # max size per file
+#    max-size: 500MB
   # log formatter
   pattern:
-    console: ${custom.logging.format}
+#    console: ${custom.logging.format}
     file: ${custom.logging.format}
 
-spring:
-  output:
-    ansi:
-      enabled: ALWAYS
+spring.output:
+  ansi:
+    enabled: ALWAYS
 
 # ---------- server port
 server.port: 80
@@ -133,30 +137,31 @@ scheduler:
       className: "com.withwiz.cryptocurrency.exchangeinterfaces.exchange.upbit.scheduler.UpbitProjectDisclosureScheduler"
 
 # ---------- exchange:upbit
-exchange:
-  upbit:
-    api:
-      host:
-      port:
-      access.key:
-      secret.key:
-    schedule:
-      #milliseconds
-      delay.max: 3
+#exchange:
+#  upbit:
+#    api:
+#      host:
+#      port:
+#      access.key:
+#      secret.key:
+#    schedule:
+#      #milliseconds
+#      delay.max: 3
 
 # ---------- telegram interface
+# telegram interface config template
 telegram:
-  api:
-    bots:
-      - name:
-        token:
-        chatId:
-      - name:
-        token:
-        chatId:
+#  api:
+#    bots:
+#      - name:
+#        token:
+#        chatId:
+#      - name:
+#        token:
+#        chatId:
   # notice message
-  notice:
-    message: "[News] \n"
+#  notice:
+#    message: "[News] \n"
 
 # ---------- profiles
-spring.profiles.include:
+#spring.profiles.include:
