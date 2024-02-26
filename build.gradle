@@ -3,7 +3,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 plugins {
-    id 'org.springframework.boot' version '2.7.9'
+    id 'org.springframework.boot' version '3.1.0'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'java'
 //    id 'maven'
@@ -14,9 +14,10 @@ plugins {
 ext {
     set('snippetsDir', file("build/generated-snippets"))
     version_project = project.properties["app.version"]
+    version_fullVersion = version_project + '.' + LocalDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault()).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
     version_logback = '1.2.3'
     version_slf4j = '1.7.30'
-    version_lombok = '1.18.4'
+    version_lombok = '1.18.26'
     version_commons_cli = '1.5.0'
     version_commons_lang = '3.12.0'
     version_commons_codec = '1.14'
@@ -30,12 +31,12 @@ ext {
     version_okhttp = '4.9.0'
     version_jetty = '1.5.7.RELEASE'
     version_swagger = '2.9.2'
-    version_java = '1.8'
+    version_java = JavaVersion.VERSION_17
     project_build_sourceEncoding = 'UTF-8'
 }
 
 bootJar.enabled = true
-jar.enabled = true
+jar.enabled = false
 
 group = project.properties["app.group"]
 version = ext.version_project
@@ -50,16 +51,15 @@ springBoot {
 //                    'group'  : project.properties["app.group"],
 //                    'name'   : project.properties["app.name"],
 //                    'version': project.properties["app.version"]
-                'fullVersion' : project.properties["app.version"] + '.' + LocalDateTime.ofInstant(properties["time"], ZoneOffset.systemDefault()).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+                'fullVersion' : version
             ]
         }
     }
 }
 
 bootJar {
-    archiveName = project.properties["app.name"] + '-' + project.properties["app.version"] + "sb.${extension}"
+    archiveFileName.set(project.properties["app.name"] + '-' + project.properties["app.version"] + "sb." + archiveExtension.get())
 }
-
 
 jar {
     manifest {
