@@ -1,0 +1,176 @@
+# mode
+spring:
+  profiles:
+    active: local
+    group:
+      dev:
+      local:
+      test:
+    include:
+
+# multi config
+spring.config:
+  import:
+    - classpath:/application.yml
+
+# ---------- personal custom setting
+custom:
+  logging:
+    level:
+      default: INFO
+    format: "%clr(%-5level) %clr(%date){cyan} %clr(%thread){yellow} %clr([%logger{36}.%M:%line]){blue} %msg%n"
+
+# ---------- logging
+logging:
+  # level
+  level:
+    # default
+    root: INFO
+    # packages
+    com.withwiz: INFO
+    com.withwiz.cryptocurrency: DEBUG
+    # spring
+    org.springframework.web: ERROR
+    # hibernate
+    org.hibernate: ERROR
+    org.hibernate.SQL: DEBUG
+    #org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+    # log4jdbc
+    jdbc: OFF
+    # for connection "open" or "close"
+    jdbc.connection: ERROR
+    # for sql
+    jdbc.sqlonly: DEBUG
+    # for query time(milliseconds)
+    jdbc.sqltiming: OFF
+    # alls except for resultset
+    jdbc.audit: OFF
+    # with resultset
+    jdbc.resultset: OFF
+    # with resultset table
+    jdbc.resultsettable: DEBUG
+    # hikari
+    com.zaxxer.hikari.HikariDataSource: ERROR
+    # howtodoinjava
+    com.howtodoinjav: INFO
+  file:
+    # log file full path
+    name: ./logs/exchange-interfaces.log
+    # max history(days)
+    max-history: 30
+    # max size per file
+    max-size: 500MB
+  # log formatter
+  pattern:
+    console: ${custom.logging.format}
+    file: ${custom.logging.format}
+
+spring.main:
+  banner-mode: OFF
+
+spring.output:
+  ansi:
+    enabled: ALWAYS
+
+# ---------- server port
+server.port: 80
+
+## ---------- database
+#spring.datasource:
+#  #  driver-class-name: org.h2.Driver
+#  driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#  # for h2 embeded mode
+#  # url: jdbc:h2:file:~/exchange-interfaces
+#  url: jdbc:log4jdbc:h2:file:~/exchange-interfaces
+#  # for server mode
+#  # url: jdbc:h2:tcp://localhost/~/exchange-monitor
+#  username: exchangemonitor
+#  password: exchangemonitor
+#  initialization-mode: always
+#  hikari:
+#    connection-timeout: 5000
+#    validation-timeout: 1000
+#    maximum-pool-size: 30
+#    minimum-idle: 2
+#    connection-test-query: SELECT 1
+#  #continue-on-error: true
+#  data: classpath:/sql/data/*.sql
+#  #schema: classpath:/sql/schema/schema.sql
+#
+## ---------- h2 database
+#spring.h2.console:
+#  enabled: true
+#  path: /h2
+
+# ---------- jpa
+spring.jpa:
+  show-sql: true
+  properties.hibernate.format_sql: true
+  generate-ddl: true
+  hibernate:
+    ddl-auto: update
+    naming:
+      implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+# ---------- thymeleaf default settings
+spring.thymeleaf:
+  prefix: classpath:/templates/
+  suffix: .html
+  mode: HTML
+  encoding: UTF-8
+  check-template-location: true
+  ## thymeleaf custom settings
+  cache: false
+
+# ---------- devtools
+spring.devtools.restart.enabled: true
+
+# ---------- actuators
+management.endpoints.web.exposure.include: "*"
+#management.endpoints.web.exposure.exclude: "*"
+
+# ---------- scheduler
+# quarts
+spring.quartz:
+  job-store-type: jdbc
+  jdbc.initialize-schema: always
+
+# scheduler interface
+scheduler:
+  instances:
+    - name: "UpbitNoticeListingScheduler"
+      className: "com.withwiz.cryptocurrency.exchangemonitor.scheduler.UpbitNoticeListingScheduler"
+#    - name: "UpbitProjectDisclosureScheduler"
+#      className: "com.withwiz.cryptocurrency.exchangemonitor.scheduler.UpbitProjectDisclosureScheduler"
+
+# ---------- exchange:upbit
+exchange:
+  upbit:
+    api:
+      host:
+      port:
+      access.key:
+      secret.key:
+    schedule:
+      #milliseconds
+      delay.max: 5
+
+# ---------- telegram interface
+# telegram interface config template
+telegram:
+  api:
+    bots:
+      - name:
+        token:
+        chatId:
+
+      # - name:
+      #   token:
+      #   chatId:
+  # notice message
+  notice:
+    message: "[News] \n"
+
+# ---------- profiles
+#spring.profiles.include:
