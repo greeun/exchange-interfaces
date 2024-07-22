@@ -1,0 +1,148 @@
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import com.vanniktech.maven.publish.SonatypeHost
+
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'com.vanniktech.maven.publish' version '0.28.0'
+    id 'signing'
+    id 'org.springframework.boot' version '3.3.0'
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+
+    app_group = 'com.withwiz.cryptocurrency'
+    app_name = 'exchange-interfaces'
+    version_project = '0.1.0'
+    version_fullVersion = version_project + '.' \
+    + LocalDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault()).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+
+    version_commons_cli = '1.5.0'
+    version_commons_lang = '3.12.0'
+    version_commons_codec = '1.14'
+    version_jackson = '2.14.2'
+    version_java = JavaVersion.VERSION_17
+    version_jetty = '1.5.7.RELEASE'
+    version_jsoup = '1.15.3'
+    version_log4jdbc = '1.16'
+    version_logback = '1.5.6'
+    version_lombok = '1.18.26'
+    version_netty = '4.1.50.Final'
+    version_okhttp = '4.12.0'
+    version_sandbeach = '0.0.1'
+    version_quartz = '2.3.2'
+    version_slf4j = '2.0.13'
+    version_swagger = '2.9.2'
+    project_build_sourceEncoding = 'UTF-8'
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    implementation.setCanBeResolved(true)
+}
+
+bootJar.enabled = true
+jar.enabled = true
+
+group = ext.app_group
+version = ext.version_project
+compileJava.options.encoding = ext.project_build_sourceEncoding
+
+java {
+    sourceCompatibility = rootProject.ext.version_java
+    targetCompatibility = rootProject.ext.version_java
+}
+
+compileJava {
+    options.encoding = rootProject.ext.project_build_sourceEncoding
+}
+
+springBoot {
+    buildInfo {
+        properties {
+            additional = [
+//                    'group'  : project.properties["app.group"],
+//                    'name'   : project.properties["app.name"],
+//                    'version': project.properties["app.version"]
+                'fullVersion' : version
+            ]
+        }
+    }
+}
+
+bootJar {
+    archiveFileName.set("${app_name}" + '-' + "${version}" + "sb." + archiveExtension.get())
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'Main-Class': 'com.withwiz.cryptocurrency.util.ExchangeInterfacesCommandUtil'
+    }
+    from {
+        configurations.implementation.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+//    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+
+//    implementation group: 'org.slf4j', name: 'slf4j-api', version: "${version_slf4j}"
+//    implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: "${version_slf4j}"
+//    implementation group: 'org.slf4j', name: 'log4j-over-slf4j', version: "${version_slf4j}"
+//    implementation group: 'ch.qos.logback', name: 'logback-classic', version: "${version_logback}"
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor("org.projectlombok:lombok:${version_lombok}")
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+//    //h2 database
+//    runtimeOnly 'com.h2database:h2'
+
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: "${version_commons_lang}"
+    implementation group: 'commons-codec', name: 'commons-codec', version: "${version_commons_codec}"
+    implementation "commons-cli:commons-cli:${version_commons_cli}"
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${version_jackson}"
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${version_jackson}"
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${version_jackson}"
+
+    implementation group: 'org.quartz-scheduler', name: 'quartz', version: "${version_quartz}"
+
+    implementation group: 'com.withwiz', name: 'sandbeach', version: "${version_sandbeach}"
+
+//    //documentation
+//    implementation group: 'io.springfox', name: 'springfox-swagger2', version: "${version_swagger}"
+//    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: "${version_swagger}"
+
+    implementation group: 'org.jsoup', name: 'jsoup', version: "${version_jsoup}"
+
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: "${version_okhttp}"
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
