@@ -17,7 +17,7 @@ ext {
 
     app_group = 'com.withwiz.cryptocurrency'
     app_name = 'exchange-interfaces'
-    version_project = '0.1.0'
+    version_project = '0.5.0'
     version_fullVersion = version_project + '.' \
     + LocalDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault()).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
 
