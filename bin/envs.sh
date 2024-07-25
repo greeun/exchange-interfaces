@@ -1,7 +1,7 @@
 #!/bin/sh
 APP_NAME=exchange-interfaces
-VERSION=v0.1.0sb
-APP_PATH=/apps/${APP_NAME}
+VERSION=0.5.0sb
+APP_PATH=..
 LIB_FILE_NAME=${APP_NAME}-${VERSION}.jar
 CONFIG_FILE_NAME=application.yml
 
