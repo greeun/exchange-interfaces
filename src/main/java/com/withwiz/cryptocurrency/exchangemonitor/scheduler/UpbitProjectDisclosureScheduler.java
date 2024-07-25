@@ -81,8 +81,8 @@ public class UpbitProjectDisclosureScheduler extends ASpringDynamicScheduler {
                 log.info("delay randomized: {}", seconds);
 
                 Instant nextExecutionTime = triggerContext.lastActualExecution() != null
-                        ? Instant.ofEpochMilli(triggerContext.lastActualExecution().toEpochMilli()) : Instant.now();
-                nextExecutionTime.plusMillis(seconds * 1000); //you can get the value from wherever you want
+                        ? Instant.ofEpochMilli(triggerContext.lastActualExecution().toEpochMilli()).plusSeconds(seconds)
+                        : Instant.now().plusSeconds(seconds);
                 return nextExecutionTime;
             }
         };
