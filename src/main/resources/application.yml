@@ -25,7 +25,7 @@ logging:
   # level
   level:
     # default
-    root: INFO
+    root: ${custom.logging.level.default}
     # packages
     com.withwiz: INFO
     com.withwiz.cryptocurrency: DEBUG
@@ -153,7 +153,7 @@ exchange:
       access.key:
       secret.key:
     schedule:
-      #milliseconds
+      #seconds
       delay.max: 5
 
 # ---------- telegram interface

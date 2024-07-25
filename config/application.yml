@@ -5,8 +5,8 @@ application:
 
 # multi config
 spring.config:
-    import:
-      - classpath:/application.yml
+  import:
+    - classpath:/application.yml
 
 # ---------- personal custom setting
 custom:
@@ -15,7 +15,7 @@ custom:
       default: INFO
     format: "%clr(%-5level) %clr(%date){cyan} %clr(%thread){yellow} %clr([%logger{36}.%M:%line]){blue} %msg%n"
 
-# logging
+# ---------- logging
 logging:
   # level
   level:
@@ -23,7 +23,7 @@ logging:
     root: ${custom.logging.level.default}
     # packages
     com.withwiz: INFO
-    com.withwiz.cryptocurrency: INFO
+    com.withwiz.cryptocurrency: DEBUG
     # spring
     org.springframework.web: ERROR
     # hibernate
@@ -57,21 +57,20 @@ logging:
     max-size: 500MB
   # log formatter
   pattern:
-    # disable console logging
-    console:
+    console: ${custom.logging.format}
     file: ${custom.logging.format}
 
 spring.main:
-    banner-mode: OFF
+  banner-mode: OFF
 
 spring.output:
-    ansi:
-      enabled: ALWAYS
+  ansi:
+    enabled: ALWAYS
 
-# server port
+# ---------- server port
 server.port: 80
 
-# ---------- database
+## ---------- database
 #spring.datasource:
 #  #  driver-class-name: org.h2.Driver
 #  driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
@@ -98,7 +97,7 @@ server.port: 80
 #  enabled: true
 #  path: /h2
 
-# jpa
+# ---------- jpa
 spring.jpa:
   show-sql: true
   properties.hibernate.format_sql: true
@@ -109,7 +108,7 @@ spring.jpa:
       implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
       physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
-# thymeleaf default settings
+# ---------- thymeleaf default settings
 spring.thymeleaf:
   prefix: classpath:/templates/
   suffix: .html
@@ -119,19 +118,28 @@ spring.thymeleaf:
   ## thymeleaf custom settings
   cache: false
 
-# devtools
+# ---------- devtools
 spring.devtools.restart.enabled: true
 
-# actuators
+# ---------- actuators
 management.endpoints.web.exposure.include: "*"
 #management.endpoints.web.exposure.exclude: "*"
 
+# ---------- scheduler
 # quarts
 spring.quartz:
   job-store-type: jdbc
   jdbc.initialize-schema: always
 
-# exchange:upbit
+# scheduler interface
+scheduler:
+  instances:
+    - name: "UpbitNoticeListingScheduler"
+      className: "com.withwiz.cryptocurrency.exchangemonitor.scheduler.UpbitNoticeListingScheduler"
+#    - name: "UpbitProjectDisclosureScheduler"
+#      className: "com.withwiz.cryptocurrency.exchangemonitor.scheduler.UpbitProjectDisclosureScheduler"
+
+# ---------- exchange:upbit
 exchange:
   upbit:
     api:
@@ -140,10 +148,11 @@ exchange:
       access.key:
       secret.key:
     schedule:
-      #milliseconds
-      delay.max: 8
+      #seconds
+      delay.max: 5
 
-# telegram interface
+# ---------- telegram interface
+# telegram interface config template
 telegram:
   api:
     bots:
@@ -158,5 +167,5 @@ telegram:
   notice:
     message: "[News] \n"
 
-# profiles
-spring.profiles.include:
+# ---------- profiles
+#spring.profiles.include:
