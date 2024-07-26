@@ -52,40 +52,27 @@ public class UpbitNoticeListingScheduler extends ASpringDynamicScheduler {
                 String detailPageUrl = UpbitConsts.URL_NOTICE_DETAIL_PAGE + newNoticePost.getId();
                 String sendMessage = message + newNoticePost.toString() + ", url=" + detailPageUrl;
                 for(Bot bot: botProperties.getBots()) {
-                    response = TelegramUtil.publishMessageToChannel(bot.getToken(), Long.toString(bot.getChatId()), sendMessage);
+                    response = TelegramUtil.publishMessageToChannel(bot.getToken(), bot.getChatId(), sendMessage);
                     log.info("telegram response: {}", response);
                 }
             }
         } catch (IOException e) {
             log.error("{}", e);
         }
-
     }
 
     @Override
     public Trigger getTrigger() {
 
         return new Trigger() {
-//            @Override
-//            public Date nextExecutionTime(TriggerContext triggerContext) {
-//                int seconds = RandomUtil.randomInt(randomMaxBound);
-//                log.info("delay randomized: {}", seconds);
-//
-//                Calendar nextExecutionTime =  new GregorianCalendar();
-//                Date lastActualExecutionTime = triggerContext.lastActualExecutionTime();
-//                nextExecutionTime.setTime(lastActualExecutionTime != null ? lastActualExecutionTime : new Date());
-//                nextExecutionTime.add(Calendar.MILLISECOND, seconds * 1000); //you can get the value from wherever you want
-//                return nextExecutionTime.getTime();
-//            }
-
             @Override
             public Instant nextExecution(TriggerContext triggerContext) {
                 int seconds = RandomUtil.randomInt(randomMaxBound);
                 log.info("delay randomized: {}", seconds);
 
                 Instant nextExecutionTime = triggerContext.lastActualExecution() != null
-                        ? Instant.ofEpochMilli(triggerContext.lastActualExecution().toEpochMilli()) : Instant.now();
-                nextExecutionTime.plusSeconds(seconds); //you can get the value from wherever you want
+                        ? Instant.ofEpochMilli(triggerContext.lastActualExecution().toEpochMilli()).plusSeconds(seconds)
+                        : Instant.now().plusSeconds(seconds);
                 return nextExecutionTime;
             }
         };

@@ -50,7 +50,7 @@ public class UpbitProjectDisclosureScheduler extends ASpringDynamicScheduler {
                 TelegramResponseSendMessage response = null;
                 String sendMessage = message + newDisclosurePost.toString();
                 for (Bot bot : botProperties.getBots()) {
-                    response = TelegramUtil.publishMessageToChannel(bot.getToken(), Long.toString(bot.getChatId()), sendMessage);
+                    response = TelegramUtil.publishMessageToChannel(bot.getToken(), bot.getChatId(), sendMessage);
                     log.info("telegram response: {}", response);
                 }
             }
@@ -63,18 +63,6 @@ public class UpbitProjectDisclosureScheduler extends ASpringDynamicScheduler {
     public Trigger getTrigger() {
 
         return new Trigger() {
-//            @Override
-//            public Date nextExecutionTime(TriggerContext triggerContext) {
-//                int seconds = RandomUtil.randomInt(randomMaxBound);
-//                log.info("delay randomized: {}", seconds);
-//
-//                Calendar nextExecutionTime = new GregorianCalendar();
-//                Date lastActualExecutionTime = triggerContext.lastActualExecutionTime();
-//                nextExecutionTime.setTime(lastActualExecutionTime != null ? lastActualExecutionTime : new Date());
-//                nextExecutionTime.add(Calendar.MILLISECOND, seconds * 1000); //you can get the value from wherever you want
-//                return nextExecutionTime.getTime();
-//            }
-
             @Override
             public Instant nextExecution(TriggerContext triggerContext) {
                 int seconds = RandomUtil.randomInt(randomMaxBound);
