@@ -1,8 +1,8 @@
 package com.withwiz.cryptocurrency.util;
 
-import com.withwiz.commandutil.CommonCommandUtil;
 import com.withwiz.cryptocurrency.exchangeinterfaces.upbit.util.UpbitCommandUtil;
 
+import com.withwiz.sandbeach.util.CommonCommandUtil;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.ArrayUtils;
 
