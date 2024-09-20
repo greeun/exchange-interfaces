@@ -1,12 +1,7 @@
 # mode
-application:
+spring:
   profiles:
-    active: dev
-
-# multi config
-spring.config:
-  import:
-    - classpath:/application.yml
+    active: prod
 
 # ---------- personal custom setting
 custom:
@@ -57,10 +52,10 @@ logging:
     max-size: 500MB
   # log formatter
   pattern:
-    console: ${custom.logging.format}
+    console:
     file: ${custom.logging.format}
 
-spring.main:
+#spring.main:
   banner-mode: OFF
 
 spring.output:
@@ -98,31 +93,31 @@ server.port: 80
 #  path: /h2
 
 # ---------- jpa
-spring.jpa:
-  show-sql: true
-  properties.hibernate.format_sql: true
-  generate-ddl: true
-  hibernate:
-    ddl-auto: update
-    naming:
-      implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#spring.jpa:
+#  show-sql: true
+#  properties.hibernate.format_sql: true
+#  generate-ddl: true
+#  hibernate:
+#    ddl-auto: update
+#    naming:
+#      implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+#      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 # ---------- thymeleaf default settings
-spring.thymeleaf:
-  prefix: classpath:/templates/
-  suffix: .html
-  mode: HTML
-  encoding: UTF-8
-  check-template-location: true
-  ## thymeleaf custom settings
-  cache: false
+#spring.thymeleaf:
+#  prefix: classpath:/templates/
+#  suffix: .html
+#  mode: HTML
+#  encoding: UTF-8
+#  check-template-location: true
+#  ## thymeleaf custom settings
+#  cache: false
 
 # ---------- devtools
 spring.devtools.restart.enabled: true
 
 # ---------- actuators
-management.endpoints.web.exposure.include: "*"
+#management.endpoints.web.exposure.include: "*"
 #management.endpoints.web.exposure.exclude: "*"
 
 # ---------- scheduler
@@ -136,8 +131,8 @@ scheduler:
   instances:
     - name: "UpbitNoticeListingScheduler"
       className: "com.withwiz.cryptocurrency.exchangemonitor.scheduler.UpbitNoticeListingScheduler"
-#    - name: "UpbitProjectDisclosureScheduler"
-#      className: "com.withwiz.cryptocurrency.exchangemonitor.scheduler.UpbitProjectDisclosureScheduler"
+    - name: "UpbitProjectDisclosureScheduler"
+      className: "com.withwiz.cryptocurrency.exchangemonitor.scheduler.UpbitProjectDisclosureScheduler"
 
 # ---------- exchange:upbit
 exchange:
@@ -156,9 +151,9 @@ exchange:
 telegram:
   api:
     bots:
-      - name:
-        token:
-        chatId:
+      - name: a
+        token: b
+        chatId: 01
 
       # - name:
       #   token:
