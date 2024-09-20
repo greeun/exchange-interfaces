@@ -40,6 +40,16 @@ ext {
     project_build_sourceEncoding = 'UTF-8'
 }
 
+bootJar.enabled = true
+jar.enabled = true
+
+group = ext.app_group
+version = ext.version_project
+
+repositories {
+    mavenCentral()
+}
+
 configurations {
     developmentOnly
     runtimeClasspath {
@@ -51,12 +61,11 @@ configurations {
     implementation.setCanBeResolved(true)
 }
 
-bootJar.enabled = true
-jar.enabled = true
-
-group = ext.app_group
-version = ext.version_project
-compileJava.options.encoding = ext.project_build_sourceEncoding
+tasks.withType(Javadoc) {
+    options {
+        encoding 'UTF-8'
+    }
+}
 
 java {
     sourceCompatibility = rootProject.ext.version_java
@@ -96,16 +105,11 @@ jar {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
 //    implementation 'org.springframework.boot:spring-boot-starter-logging'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
 
 //    implementation group: 'org.slf4j', name: 'slf4j-api', version: "${version_slf4j}"
 //    implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: "${version_slf4j}"
@@ -145,4 +149,40 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+signing {
+    sign publishing.publications
+}
+
+mavenPublishing {
+    signAllPublications()
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    coordinates("${app_group}", "${app_name}", "${version_project}")
+    pom {
+        name = "${app_name}"
+        description = 'The Withwiz exchage-interfaces library/command-tools provides a modern way of implementing interfaces, utilities, tests.'
+        url = '<https://github.com/greeun/exchange-interfaces>'
+
+        licenses {
+            license {
+                name = 'Apache License 2.0'
+                url = '<https://github.com/greeun/exchange-interfaces/blob/main/LICENSE>'
+            }
+        }
+
+        developers {
+            developer {
+                id = 'greeun'
+                email = 'ss@withwiz.com'
+            }
+        }
+
+        scm {
+            connection = 'scm:git:github.com/greeun/exchange-interfaces.git'
+            developerConnection = 'scm:git:ssh://github.com/greeun/exchange-interfaces.git'
+            url = '<https://github.com/greeun/exchange-interfaces/tree/master>'
+        }
+    }
 }
